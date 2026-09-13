@@ -1,0 +1,8 @@
+# Initial repository code owner. Add confirmed OSPO, editorial and specialist owners here.
+* @wherka-ama
+
+# Publication-sensitive paths require the initial code owner review.
+.github/workflows/ @wherka-ama
+src/content/ @wherka-ama
+presentation*.html @wherka-ama
+docs/maintainer-guide/ @wherka-ama
