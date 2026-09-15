@@ -3,3 +3,5 @@ Amadeus OSPO landing page
 Copyright 2026 Amadeus IT Group.
 
 The repository's original code, documentation and presentation materials are licensed under the Apache License, Version 2.0, unless a file states otherwise. Third-party names, trademarks, fonts, linked documents and external content remain the property of their respective owners.
+
+The Amadeus wordmark in `src/assets/amadeus-wordmark-dark-sky.svg` is proprietary to Amadeus and is used subject to the Amadeus Brand Guidelines. It is not licensed under Apache-2.0.

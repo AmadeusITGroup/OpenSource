@@ -1,4 +1,5 @@
 import './style.css'
+import amadeusWordmark from './assets/amadeus-wordmark-dark-sky.svg'
 import { news, posts, renderMarkdown, reports, type Post } from './content'
 
 type Route =
@@ -60,7 +61,7 @@ function renderHeader(route: Route): string {
   return `
     <header class="site-header">
       <a class="wordmark" href="#/" aria-label="Amadeus OSPO home">
-        <span class="wordmark-mark" aria-hidden="true">Amadeus</span>
+        <img class="wordmark-image" src="${amadeusWordmark}" alt="" width="1920" height="646" />
         <span class="wordmark-product">Open Source<br /><strong>Program Office</strong></span>
       </a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">${icons.menu}<span class="sr-only">Toggle navigation</span></button>
@@ -79,7 +80,7 @@ function renderFooter(): string {
     <footer class="site-footer">
       <div>
         <a class="wordmark wordmark-footer" href="#/" aria-label="Amadeus OSPO home">
-          <span class="wordmark-mark" aria-hidden="true">Amadeus</span>
+          <img class="wordmark-image" src="${amadeusWordmark}" alt="" width="1920" height="646" />
           <span class="wordmark-product">Open Source<br /><strong>Program Office</strong></span>
         </a>
         <p class="footer-note">Making open source easier to understand,<br />participate in and grow.</p>
@@ -117,11 +118,17 @@ function renderHero(): string {
         <p class="hero-lede">We help people at Amadeus use, contribute to and create open source—responsibly, confidently and with a little more joy.</p>
         <div class="hero-actions"><a class="button button-primary" href="#/start">Find your first step ${icons.arrow}</a><a class="button button-quiet" href="#/story">Why open source? ${icons.arrowRight}</a></div>
       </div>
-      <div class="hero-art" aria-label="Abstract illustration representing open collaboration">
-        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div>
-        <div class="orbit-dot dot-one"></div><div class="orbit-dot dot-two"></div><div class="orbit-dot dot-three"></div>
-        <div class="hero-sticker sticker-one">open<br />by design</div><div class="hero-sticker sticker-two">share<br />the lift</div>
-        <div class="hero-center"><span>am</span><small>open<br />source</small></div>
+      <div class="hero-art" role="img" aria-label="A first open source contribution moving from a question through review to shared learning">
+        <div class="contribution-window" aria-hidden="true">
+          <div class="contribution-toolbar"><span class="window-controls"><i></i><i></i><i></i></span><span>community / first-contribution</span></div>
+          <div class="contribution-heading"><span class="branch-symbol"></span><div><small>Contribution draft</small><strong>Make the next step clearer</strong></div><span class="contribution-status">Open</span></div>
+          <div class="change-preview"><span class="change-file">README.md</span><span class="change-line"><i>+</i> Explain the first step</span><span class="change-line"><i>+</i> Share what you learned</span></div>
+          <div class="review-path"><span>Question</span><i></i><span>Review</span><i></i><span>Shared</span></div>
+          <div class="review-note"><span class="participant-stack"><i>AM</i><i>OS</i><i>+</i></span><strong>Reviewed together</strong><span class="review-check">✓</span></div>
+        </div>
+        <div class="contribution-callout callout-question" aria-hidden="true"><span>01</span>Ask with context</div>
+        <div class="contribution-callout callout-change" aria-hidden="true"><span>02</span>Make a focused change</div>
+        <div class="contribution-callout callout-learning" aria-hidden="true"><span>03</span>Leave a clearer path</div>
       </div>
       <div class="scroll-cue"><span class="scroll-line"></span><span>Scroll to explore</span></div>
     </section>
@@ -158,7 +165,11 @@ function renderImpact(): string {
     <section class="impact-section">
       <div class="section-shell impact-grid">
         <div class="impact-copy"><p class="eyebrow eyebrow-light">The point of the work</p><h2>Less friction.<br /><em>More contribution.</em></h2><p>Good open source programs do not add another gate. They make the right thing easier to do: find trusted code, share improvements upstream and build communities that last.</p><a class="button button-light" href="#/story">See how we work ${icons.arrow}</a></div>
-        <div class="impact-orbit" aria-hidden="true"><div class="impact-ring ring-a"></div><div class="impact-ring ring-b"></div><div class="impact-ring ring-c"></div><span class="impact-label label-a">trust</span><span class="impact-label label-b">craft</span><span class="impact-label label-c">community</span><span class="impact-core">open<br /><strong>impact</strong></span></div>
+        <div class="impact-map" role="img" aria-label="The OSPO connects questions, ideas and changes with guidance, trusted code, upstream projects and community knowledge">
+          <div class="impact-column impact-inputs" aria-hidden="true"><span class="map-eyebrow">People bring</span><span class="map-card"><i>?</i>Questions</span><span class="map-card"><i>+</i>Ideas</span><span class="map-card"><i>↗</i>Changes</span></div>
+          <div class="impact-bridge" aria-hidden="true"><span class="bridge-line"></span><div class="bridge-card"><small>Open Source<br />Program Office</small><strong>Guide</strong><strong>Connect</strong><strong>Share</strong></div><span class="bridge-arrow">→</span></div>
+          <div class="impact-column impact-outcomes" aria-hidden="true"><span class="map-eyebrow">Open work grows</span><span class="map-card">Trusted code<i>✓</i></span><span class="map-card">Upstream contributions<i>↗</i></span><span class="map-card">Healthy communities<i>∞</i></span></div>
+        </div>
       </div>
     </section>
   `

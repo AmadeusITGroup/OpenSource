@@ -160,6 +160,14 @@ When making a visual change:
 5. inspect at wide, medium and narrow widths;
 6. test reduced-motion behaviour if you touched transitions or animation.
 
+### Content-led illustrations
+
+The home-page illustrations are diagrams built with semantic HTML and Design Factory tokens. They explain two ideas that are central to this site: how a first contribution moves from a question through review to shared learning, and how the OSPO connects people with guidance and open source outcomes.
+
+Keep illustrations tied to a specific part of the OSPO story. Prefer recognizable open source practices, such as a focused change, review, upstream contribution or documented decision, over generic networks, orbiting shapes or decorative technology motifs. Use the existing Design Factory palette, spacing and radius tokens. Do not place the Amadeus wordmark inside an illustration or use it as a decorative graphic.
+
+If an illustration communicates meaning, give its container `role="img"` and a concise `aria-label`. Hide the internal decorative markup from assistive technology. The label should explain the idea rather than list every visible shape or colour.
+
 ## Images and public assets
 
 `src/assets/hero.png` is an application asset location. An asset imported by TypeScript or CSS is processed by Vite.
@@ -172,6 +180,8 @@ Use a clear rule:
 - If it must be available at a stable root path, use `public/`.
 
 Before adding an image, confirm its licence, source, accessibility text, file size and public-release approval.
+
+`src/assets/amadeus-wordmark-dark-sky.svg` is the official Dark Sky RGB wordmark supplied through the Amadeus Brand Guidelines. Do not crop, recolour, stretch, rotate or add effects to it. Its SVG canvas includes the required clear space, and the site renders it large enough to keep the visible wordmark above the recommended 32 px digital height. The downloaded source package and guidelines are kept locally under `.tmp/resources/` and are intentionally excluded from Git.
 
 ## `vite.config.ts`: how the build is assembled
 
