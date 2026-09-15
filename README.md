@@ -7,6 +7,7 @@ A lightweight, content-led single-page application for the Amadeus Open Source P
 ## What is included
 
 - A responsive landing page with a clear OSPO story and calls to action.
+- Amadeus Design Factory v22 design tokens for color, typography, spacing, focus and component states, while keeping the site framework-free.
 - Hash-based navigation for Home, Our story, Start here, Library and individual posts. This avoids server-side routing requirements on GitHub Pages.
 - Markdown-as-code posts in `src/content/posts/`, parsed at build time with [`marked`](https://github.com/markedjs/marked).
 - A library filter for guides, field notes and stories.
@@ -64,6 +65,12 @@ npm run validate
 ```
 
 `npm test` validates Markdown frontmatter and rejects common unsafe or internal-link patterns. `npm run validate` runs content validation, the production build and a high-severity dependency audit.
+
+## Design Factory alignment
+
+The site imports the framework-neutral CSS tokens from `@design-factory/tokens`. The local component classes in `src/style.css` map those tokens onto this site’s editorial layouts, navigation, links, cards, buttons and responsive states.
+
+The full `@design-factory/design-factory` and `@design-factory/angular` packages are intentionally not installed. They provide Angular components, while this project is a lightweight Vite and TypeScript site. `@design-factory/styles` is also not imported because its Bootstrap, AgnosUI and component-library peer dependencies would add a new UI stack. This scoped integration keeps the existing architecture while making the visual foundation consistent with Design Factory.
 
 ## Add a post
 

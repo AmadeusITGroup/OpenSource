@@ -25,9 +25,11 @@ Semantic HTML helps screen readers, keyboard users and maintainers understand th
 
 CSS controls colours, fonts, spacing, borders, responsive layout and hover/focus states. This site uses one global stylesheet, `src/style.css`, with no CSS framework.
 
-The main colour and layout values are CSS variables near the top of the file, such as `--ink`, `--paper`, `--coral`, `--mint` and `--shell`. Changing a variable can affect many pages, so inspect the whole site after a global change.
+The stylesheet imports Amadeus Design Factory v22 CSS tokens from `@design-factory/tokens`. Local aliases near the top of the file, such as `--ink`, `--paper`, `--coral`, `--mint` and `--shell`, keep the existing component CSS readable while resolving visual decisions through Design Factory tokens. Changing an alias can affect many pages, so inspect the whole site after a global change.
 
-The stylesheet has responsive rules at approximately `900px` and `560px`. Always inspect a desktop and narrow viewport after changing a grid, button or navigation rule.
+The stylesheet follows Design Factory and Bootstrap breakpoints at `992px` and `576px`. Always inspect a desktop and narrow viewport after changing a grid, button or navigation rule.
+
+Do not install `@design-factory/design-factory` or `@design-factory/angular` unless the project has separately approved an Angular migration. Do not import the full `@design-factory/styles` bundle for a small visual change: it brings a wider Bootstrap and component-library dependency surface. Prefer an existing token and the smallest local selector change.
 
 ### TypeScript: behaviour and data
 
@@ -134,7 +136,7 @@ A type such as `Post` describes the expected shape of data. It does not automati
 
 The stylesheet is organised as a set of reusable patterns:
 
-- variables in `:root`;
+- the Design Factory token import and local aliases in `:root`;
 - global element defaults;
 - shared shells, buttons, links and typography;
 - page-specific sections;
@@ -152,10 +154,11 @@ Useful classes include:
 When making a visual change:
 
 1. change the smallest selector possible;
-2. avoid changing a global variable unless the whole site should change;
-3. check keyboard focus and hover states;
-4. inspect at wide, medium and narrow widths;
-5. test reduced-motion behaviour if you touched transitions or animation.
+2. use an existing `--df-*` token instead of adding a hardcoded colour, spacing value or radius;
+3. avoid changing a global alias unless the whole site should change;
+4. check keyboard focus and hover states;
+5. inspect at wide, medium and narrow widths;
+6. test reduced-motion behaviour if you touched transitions or animation.
 
 ## Images and public assets
 

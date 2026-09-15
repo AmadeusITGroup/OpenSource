@@ -51,7 +51,7 @@ function getRoute(): Route {
 }
 
 function navLink(href: string, label: string, active = false): string {
-  return `<a class="nav-link${active ? ' is-active' : ''}" href="${href}">${label}</a>`
+  return `<a class="nav-link${active ? ' is-active' : ''}" href="${href}"${active ? ' aria-current="page"' : ''}>${label}</a>`
 }
 
 function renderHeader(route: Route): string {
@@ -60,8 +60,8 @@ function renderHeader(route: Route): string {
   return `
     <header class="site-header">
       <a class="wordmark" href="#/" aria-label="Amadeus OSPO home">
-        <span class="wordmark-mark" aria-hidden="true">a<span>m</span></span>
-        <span>open source<br /><strong>program office</strong></span>
+        <span class="wordmark-mark" aria-hidden="true">Amadeus</span>
+        <span class="wordmark-product">Open Source<br /><strong>Program Office</strong></span>
       </a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">${icons.menu}<span class="sr-only">Toggle navigation</span></button>
       <nav class="site-nav" id="site-nav" aria-label="Main navigation">
@@ -79,8 +79,8 @@ function renderFooter(): string {
     <footer class="site-footer">
       <div>
         <a class="wordmark wordmark-footer" href="#/" aria-label="Amadeus OSPO home">
-          <span class="wordmark-mark" aria-hidden="true">a<span>m</span></span>
-          <span>open source<br /><strong>program office</strong></span>
+          <span class="wordmark-mark" aria-hidden="true">Amadeus</span>
+          <span class="wordmark-product">Open Source<br /><strong>Program Office</strong></span>
         </a>
         <p class="footer-note">Making open source easier to understand,<br />participate in and grow.</p>
       </div>
@@ -260,7 +260,7 @@ function render(): void {
 
   if (!app) return
 
-  app.innerHTML = `${renderHeader(route)}<main>${content}</main>${renderFooter()}`
+  app.innerHTML = `<a class="skip-link" href="#main-content">Skip to content</a>${renderHeader(route)}<main id="main-content" tabindex="-1">${content}</main>${renderFooter()}`
   window.scrollTo({ top: 0, behavior: 'instant' })
   bindInteractions()
 }
