@@ -58,7 +58,7 @@ The fields mean:
 
 The parser in `src/content.ts` is intentionally small. It is not a full YAML parser. Keep metadata on one line per field and use the simple array format shown above. Do not add nested YAML, multi-line metadata, comments inside the metadata block or untested custom types.
 
-The validator requires all eight fields, checks duplicate slugs and rejects several unsafe/internal patterns. It does **not** prove that a claim is accurate, that a date is real, that a category is spelled correctly or that a public-release decision exists. Human review remains necessary.
+The validator requires all eight fields, detects duplicate frontmatter keys and slugs, and checks slug, calendar-date, category, read-time, tag and featured-value formats. It also rejects several unsafe, credential-shaped, local-path and internal-link patterns. It does **not** prove that a claim is accurate, that an editorial date is appropriate or that a public-release decision exists. Human review remains necessary.
 
 ## Write the article body in Markdown
 

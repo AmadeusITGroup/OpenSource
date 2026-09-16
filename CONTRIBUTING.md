@@ -6,6 +6,8 @@ This repository is a public-facing static site and content project. Contribution
 
 Please read the [Code of Conduct](CODE_OF_CONDUCT.md) before participating. For security issues, do not open a public issue; follow [SECURITY.md](SECURITY.md).
 
+If you use a coding agent, the shared public-safety, architecture and validation rules are in [AGENTS.md](AGENTS.md). Automated assistance does not replace the human reviews described below.
+
 ## What you can contribute
 
 - Website fixes and accessibility improvements.

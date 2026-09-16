@@ -10,13 +10,13 @@ Use the smallest command that answers your question, then finish with the full c
 
 | Command | What it does | When to use it |
 | --- | --- | --- |
-| `npm test` | Runs `scripts/validate-content.mjs` | After editing or adding a Markdown post |
+| `npm test` | Runs content and repository-skill validation | After editing a post or the maintainer-assistant system |
 | `npm run build` | Runs `tsc` and then `vite build` | After any source, style, post or presentation change |
 | `npm run preview` | Serves the existing `dist/` output | To inspect the production result after a build |
 | `npm audit --audit-level=high` | Checks npm dependency vulnerabilities at high severity or above | When dependencies change or the full check reports a problem |
 | `npm run validate` | Runs content validation, build and high-severity audit | Before every pull request and before release |
 
-The repository does not have a conventional unit-test suite. Its automated safety net is currently content validation, TypeScript checking, the production build, dependency audit and GitHub security workflows. A green build is necessary but not sufficient for editorial approval.
+The site does not have a conventional application unit-test suite. Its automated safety net is currently content validation, skill validation, TypeScript checking, the production build, dependency audit and GitHub security workflows. The evidence-refresh helpers have a focused offline Python test suite. A green build is necessary but not sufficient for editorial approval.
 
 ## What `npm test` checks
 
@@ -25,18 +25,28 @@ The repository does not have a conventional unit-test suite. Its automated safet
 1. reads every `.md` file in `src/content/posts/`;
 2. requires front matter delimited by `---`;
 3. requires `slug`, `title`, `deck`, `date`, `category`, `readTime`, `tags` and `featured`;
-4. checks that slugs are unique;
-5. rejects `<script>`, inline event handlers, `javascript:`, `sharepoint` and `amadeusworkplace` patterns;
-6. fails when no posts exist.
+4. checks duplicate frontmatter keys and slugs;
+5. validates slug, calendar-date, category, read-time, tag and featured-value formats;
+6. rejects script/event-handler patterns, credential-shaped text, local filesystem links and selected internal destinations;
+7. fails when no posts exist.
 
 The script exits with status `1` when it finds an error. That non-zero status stops a chained command and fails CI.
+
+`scripts/validate-skills.mjs` also checks the shared maintainer-assistant system under `.github/skills/`. It requires the seven supported skills, verifies that each folder and frontmatter `name` match, requires a discovery description, enforces the skill size limit and checks linked local resources exist.
+
+The evidence helper tests are intentionally separate because ordinary site maintenance requires only Node.js. Evidence maintainers with Python 3.10 or newer can run:
+
+```text
+python3 -m unittest discover -s .github/skills/ospo-evidence-refresh/tests -p 'test_*.py'
+```
+
+These offline tests verify no-write planning, append-only refusal, path safety, credential detection, known-caveat reporting and token-safe team subprocess construction. They do not call GitHub.
 
 It does not check:
 
 - whether an external link still responds;
 - whether a claim is approved;
 - whether a metric is current;
-- whether the category is one of the intended values;
 - whether an image has the correct licence or alternative text;
 - whether a layout is accessible at every viewport.
 

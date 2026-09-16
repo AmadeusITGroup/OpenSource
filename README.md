@@ -27,6 +27,7 @@ Repository community and governance documents:
 - [Maintainers](MAINTAINERS.md)
 - [Changelog](CHANGELOG.md)
 - [Beginner maintainer guide](docs/maintainer-guide/README.md)
+- [AI-assisted maintenance guide](docs/maintainer-guide/11-ai-assisted-maintenance.md)
 - [Apache-2.0 license](LICENSE)
 
 The presentation is now a dated, evidence-led Board narrative. It covers the Amadeus open-source journey, Manifesto principles, refreshed 2026 Board and contributor signals, project-story examples, a public-report framework, reproducibility rules and a decision ask. The supporting evidence and future-agent handover map live under `.memories/`.
@@ -36,6 +37,12 @@ The presentation is now a dated, evidence-led Board narrative. It covers the Ama
 ## Beginner maintainer guide
 
 The [beginner maintainer guide](docs/maintainer-guide/README.md) explains the repository from first principles for colleagues who work in IT but do not normally write code. It covers setup, Git and GitHub, Markdown posts, the TypeScript/CSS site, presentations, validation, deployment, security and troubleshooting.
+
+## Maintainer assistant
+
+The root [`AGENTS.md`](AGENTS.md) is the shared safety and implementation contract for coding agents. Seven focused skills under [`.github/skills/`](.github/skills/README.md) guide routine maintenance, content authoring, publication review, Design Factory and accessibility checks, site validation, dependency/security review and reproducible evidence refreshes.
+
+Start with `/ospo-maintainer` when the right workflow is unclear. The skills run mechanical checks and prepare review records, but never replace accountable human decisions about publication, facts, project status, legal/IP, privacy, security or brand exceptions. See [AI-assisted maintenance](docs/maintainer-guide/11-ai-assisted-maintenance.md) for examples and boundaries.
 
 ## Run locally
 
@@ -64,7 +71,15 @@ npm test
 npm run validate
 ```
 
-`npm test` validates Markdown frontmatter and rejects common unsafe or internal-link patterns. `npm run validate` runs content validation, the production build and a high-severity dependency audit.
+`npm test` validates Markdown frontmatter, rejects common unsafe or internal-link patterns, and checks the repository skill package. `npm run validate` runs those checks, the production build and a high-severity dependency audit.
+
+Evidence maintainers can also run the offline helper tests with Python 3.10 or newer:
+
+```text
+python3 -m unittest discover -s .github/skills/ospo-evidence-refresh/tests -p 'test_*.py'
+```
+
+The external evidence collection workflow additionally requires `uv`, `gh` authentication and a reviewed checkout of the separate GitHub activity analyzer. Ordinary site editing does not.
 
 ## Design Factory alignment
 

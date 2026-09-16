@@ -24,6 +24,7 @@ Read the modules in order the first time. Later, use the task table to jump dire
 | [08 — Security and public release](08-security-and-publication.md) | How to protect confidential information, licensing, public claims and reviewer decisions |
 | [09 — Troubleshooting](09-troubleshooting.md) | Practical fixes for the problems a new maintainer is most likely to meet |
 | [10 — Quick reference](10-quick-reference.md) | Checklists, file-to-task lookup, glossary and copyable command sequences |
+| [11 — AI-assisted maintenance](11-ai-assisted-maintenance.md) | How to use the repository skills, what they automate and which decisions stay human |
 
 ## The five-minute mental model
 
@@ -52,14 +53,15 @@ read → edit a small change → validate → inspect in a browser → open a pu
 
 ## Start here if you only need to make a small content change
 
-1. Read [CONTRIBUTING.md](../../CONTRIBUTING.md) and [SUPPORT.md](../../SUPPORT.md).
-2. Check that the material is approved for public use. Never copy from `.tmp/` or `.memories/` into a public file.
-3. Create or edit a Markdown file under `src/content/posts/`.
-4. Run `npm ci` if dependencies are not installed.
-5. Run `npm run validate`.
-6. Run `npm run dev` and inspect the page in a browser, including a narrow mobile width.
-7. Review `git diff` before opening a pull request.
-8. Describe the source, date, owner and publication status of every new public claim.
+1. Ask `/ospo-content-authoring` to guide the change, or follow the manual steps below.
+2. Read [CONTRIBUTING.md](../../CONTRIBUTING.md) and [SUPPORT.md](../../SUPPORT.md).
+3. Check that the material is approved for public use. Never copy from `.tmp/` or `.memories/` into a public file.
+4. Create or edit a Markdown file under `src/content/posts/`.
+5. Run `npm ci` if dependencies are not installed.
+6. Run `npm run validate`.
+7. Run `npm run dev` and inspect the page in a browser, including a narrow mobile width.
+8. Review `git diff` before opening a pull request.
+9. Describe the evidence class, source, date, scope, owner, caveat and refresh rule for every new public claim.
 
 If you are changing code, workflows, licensing, security behaviour or public metrics, read the relevant full module and involve the named reviewers.
 

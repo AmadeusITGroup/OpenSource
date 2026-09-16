@@ -39,6 +39,7 @@ ospo-landing-page/
 ├── package-lock.json         Exact dependency versions for repeatable installs
 ├── tsconfig.json             TypeScript rules
 ├── vite.config.ts            Build inputs and deployment base path
+├── AGENTS.md                 Shared coding-agent rules and safety boundaries
 └── repository documents      README, contributing, security, governance, licence
 ```
 
@@ -56,6 +57,7 @@ ospo-landing-page/
 | Change the long or short deck | `presentation.html`, `presentation-short.html` | These files contain their own HTML, CSS and JavaScript |
 | Change deployment or security automation | `.github/workflows/*.yml` | GitHub runs these files outside your computer |
 | Change who must review a path | `.github/CODEOWNERS` | GitHub uses this to request reviews |
+| Change shared coding-agent behavior | `AGENTS.md` | It is the single repository-wide agent contract |
 | Explain a repository process | `README.md`, `CONTRIBUTING.md`, `GOVERNANCE.md` | These are the human operating instructions |
 
 ## What happens to each kind of file?

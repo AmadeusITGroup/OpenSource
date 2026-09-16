@@ -3,6 +3,8 @@
 
 # Publication-sensitive paths require the initial code owner review.
 .github/workflows/ @wherka-ama
+/AGENTS.md @wherka-ama
+.github/skills/ @wherka-ama
 src/content/ @wherka-ama
 presentation*.html @wherka-ama
 docs/maintainer-guide/ @wherka-ama

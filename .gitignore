@@ -17,6 +17,8 @@ dist-ssr
 .tmp/
 .memories/
 *.tsbuildinfo
+__pycache__/
+*.py[cod]
 
 # Editor directories and files
 .vscode/*

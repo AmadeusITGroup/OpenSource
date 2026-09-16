@@ -17,11 +17,13 @@ You will learn what the local tools do and how to get from a fresh checkout to a
 | Vite | The development server and build tool | Serves files locally and creates `dist/` |
 | Browser | The program that displays the site | Lets you inspect the real result |
 
+The optional evidence-refresh workflow also uses Python 3.10 or newer, `uv`, the GitHub CLI and a separately reviewed analyzer checkout. You do not need those tools for ordinary site or content work.
+
 You do not need to understand the internal implementation of each tool to start. You do need to know which tool is responsible when something fails.
 
 ## Required versions
 
-The project documentation asks for Node.js **20.19 or newer**, or a current LTS release, and npm. Use the current version approved by your IT environment if your organisation manages Node centrally.
+The site asks for Node.js **20.19 or newer**, or a current LTS release, and npm. Use the current version approved by your IT environment if your organisation manages Node centrally.
 
 Check what is already installed:
 
@@ -105,7 +107,7 @@ The short check is:
 npm test
 ```
 
-It validates the Markdown post files.
+It validates the Markdown post files and repository skill package.
 
 The standard full check is:
 
