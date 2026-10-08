@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#111a35" />
+  <title>Amadeus Open Source — from activity to a public story</title>
+  <style>
+    :root {
+      --ink: #111a35;
+      --paper: #f8f7f2;
+      --soft: #65718a;
+      --coral: #ff6d4d;
+      --mint: #a9e5d4;
+      --lavender: #d9d3ff;
+      --yellow: #f7d87a;
+      --line: rgba(17, 26, 53, .16);
+      --display: 'Arial Narrow', 'Avenir Next', Arial, sans-serif;
+      --sans: Inter, 'Segoe UI', Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-width: 320px; background: var(--ink); color: var(--ink); font-family: var(--sans); }
+    body { overflow: hidden; }
+    a { color: inherit; }
+    .deck { min-height: 100vh; position: relative; }
+    .slide { display: none; width: 100vw; height: 100vh; min-height: 650px; padding: 6vh 8vw 7vh; position: relative; overflow: hidden; background: var(--paper); }
+    .slide.is-active { display: flex; flex-direction: column; justify-content: center; animation: enter .32s ease both; }
+    @keyframes enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+    .slide::before { content: ''; position: absolute; width: 42vw; height: 42vw; max-width: 640px; max-height: 640px; border-radius: 50%; background: var(--lavender); right: -16vw; top: -18vw; opacity: .8; }
+    .slide.dark { color: var(--paper); background: var(--ink); }
+    .slide.dark::before { background: #26335e; }
+    .slide.coral { background: var(--coral); }
+    .slide.mint { background: var(--mint); }
+    .slide.yellow { background: var(--yellow); }
+    .topline, .footerline { position: absolute; z-index: 2; left: 8vw; right: 8vw; display: flex; justify-content: space-between; gap: 20px; font: 10px/1.2 monospace; letter-spacing: .1em; text-transform: uppercase; }
+    .topline { top: 4vh; }
+    .footerline { bottom: 3.5vh; color: var(--soft); }
+    .dark .footerline { color: rgba(248, 247, 242, .58); }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+    .brand-mark { display: grid; width: 27px; height: 27px; place-items: center; border: 1px solid currentColor; border-radius: 50%; font: bold 15px Arial; letter-spacing: -.14em; }
+    .brand-mark span { color: var(--coral); }
+    .content { position: relative; z-index: 1; width: 100%; max-width: 1160px; }
+    .kicker { margin: 0 0 22px; color: var(--coral); font: 11px monospace; letter-spacing: .12em; text-transform: uppercase; }
+    .dark .kicker { color: var(--mint); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 { font-family: var(--display); letter-spacing: -.055em; }
+    h1 { max-width: 1050px; margin-bottom: 25px; font-size: clamp(56px, 8.8vw, 138px); line-height: .86; }
+    h2 { max-width: 950px; margin-bottom: 27px; font-size: clamp(42px, 6.2vw, 88px); line-height: .9; }
+    h3 { margin-bottom: 10px; font-size: 25px; line-height: 1; }
+    em { color: var(--coral); font-style: normal; }
+    .dark em { color: var(--mint); }
+    .lede { max-width: 700px; margin-bottom: 0; color: var(--soft); font-size: clamp(17px, 1.9vw, 25px); line-height: 1.42; }
+    .dark .lede { color: rgba(248, 247, 242, .74); }
+    .small { max-width: 590px; color: var(--soft); font-size: 16px; line-height: 1.55; }
+    .dark .small { color: rgba(248, 247, 242, .72); }
+    .fineprint { max-width: 760px; margin: 23px 0 0; color: var(--soft); font: 10px/1.45 monospace; }
+    .dark .fineprint { color: rgba(248, 247, 242, .62); }
+    .source { position: relative; z-index: 1; max-width: 900px; margin: 22px 0 0; color: var(--soft); font: 10px/1.45 monospace; }
+    .dark .source { color: rgba(248, 247, 242, .62); }
+    .source a { text-decoration: underline; text-underline-offset: 2px; }
+    .badge { display: inline-flex; padding: 5px 8px; border-radius: 99px; color: var(--ink); background: var(--mint); font: 10px monospace; letter-spacing: .04em; text-transform: uppercase; }
+    .badge.coral { background: var(--coral); }
+    .badge.yellow { background: var(--yellow); }
+    .badge.lavender { background: var(--lavender); }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 7vw; align-items: center; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; align-items: stretch; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 30px; }
+    .chip { padding: 7px 11px; border: 1px solid var(--line); border-radius: 99px; font: 10px monospace; text-transform: uppercase; }
+    .dark .chip { border-color: rgba(248, 247, 242, .28); }
+    .orb { position: relative; width: min(39vw, 500px); aspect-ratio: 1; margin: auto; }
+    .orb::before { content: ''; position: absolute; inset: 14%; border-radius: 48% 52% 55% 45%; background: var(--lavender); transform: rotate(-17deg); }
+    .orb::after { content: 'am'; position: absolute; inset: 31%; display: grid; place-items: center; border-radius: 50%; color: var(--paper); background: var(--ink); font: bold clamp(35px, 5vw, 70px) Arial; letter-spacing: -.15em; box-shadow: 10px 10px 0 rgba(17, 26, 53, .14); }
+    .ring { position: absolute; z-index: 1; inset: 20% 10%; border: 1px solid var(--ink); border-radius: 50%; transform: rotate(32deg) scaleY(.58); }
+    .ring:nth-child(2) { inset: 14% 21%; transform: rotate(-46deg) scaleY(.68); }
+    .ring:nth-child(3) { inset: 9% 25%; transform: rotate(77deg) scaleY(.48); }
+    .dot { position: absolute; z-index: 2; width: 17px; height: 17px; border-radius: 50%; background: var(--coral); top: 12%; right: 15%; }
+    .dot:nth-child(5) { top: auto; right: auto; bottom: 19%; left: 8%; width: 12px; height: 12px; background: var(--mint); }
+
+    .timeline { display: grid; grid-template-columns: repeat(6, 1fr); gap: 9px; margin-top: 42px; }
+    .timeline-item { min-height: 195px; padding: 18px; border-top: 3px solid var(--coral); background: rgba(255, 255, 255, .38); }
+    .dark .timeline-item { border-color: var(--mint); background: rgba(255, 255, 255, .05); }
+    .timeline-year { display: block; margin-bottom: 38px; font: 12px monospace; color: var(--coral); }
+    .dark .timeline-year { color: var(--mint); }
+    .timeline-item strong { display: block; margin-bottom: 8px; font: 600 18px/1 var(--display); }
+    .timeline-item p { margin: 0; color: var(--soft); font-size: 12px; line-height: 1.38; }
+    .dark .timeline-item p { color: rgba(248, 247, 242, .68); }
+
+    .principle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 36px; }
+    .principle-panel { padding: 24px; border: 1px solid var(--line); background: rgba(255, 255, 255, .3); }
+    .principle-panel h3 { margin-bottom: 17px; font-size: 27px; }
+    .principle-list { display: grid; gap: 9px; padding: 0; margin: 0; list-style: none; }
+    .principle-list li { display: grid; grid-template-columns: 28px 1fr; gap: 8px; color: var(--soft); font-size: 13px; line-height: 1.35; }
+    .principle-list b { color: var(--coral); font: 11px monospace; }
+    .principle-panel:last-child b { color: #397f75; }
+
+    .quote { max-width: 930px; padding-left: 34px; border-left: 4px solid var(--coral); font: 500 clamp(30px, 4vw, 55px)/1.03 var(--display); letter-spacing: -.055em; }
+    .quote cite { display: block; margin-top: 25px; color: var(--soft); font: 10px monospace; letter-spacing: .1em; text-transform: uppercase; }
+    .dark .quote cite { color: rgba(248, 247, 242, .65); }
+    .role-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 38px; }
+    .role { min-height: 140px; padding: 18px; border: 1px solid var(--line); background: rgba(255, 255, 255, .25); }
+    .role strong { display: block; margin-bottom: 12px; font: 12px var(--display); }
+    .role p { margin: 0; color: var(--soft); font-size: 12px; line-height: 1.4; }
+
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 38px; }
+    .kpi { min-height: 150px; padding: 20px; border: 1px solid var(--line); background: rgba(255, 255, 255, .3); }
+    .dark .kpi { border-color: rgba(248, 247, 242, .23); background: rgba(255, 255, 255, .05); }
+    .kpi strong { display: block; margin-bottom: 10px; font: bold clamp(30px, 4vw, 55px) var(--display); letter-spacing: -.06em; }
+    .kpi span { color: var(--soft); font-size: 12px; line-height: 1.35; }
+    .dark .kpi span { color: rgba(248, 247, 242, .68); }
+    .status-band { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 28px; }
+    .status-band span { padding: 7px 10px; border: 1px solid var(--line); border-radius: 99px; font: 10px monospace; }
+    .dark .status-band span { border-color: rgba(248, 247, 242, .3); }
+
+    .case-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 38px; }
+    .case { min-height: 205px; padding: 19px; border: 1px solid var(--line); background: rgba(255, 255, 255, .28); }
+    .case .case-type { display: block; margin-bottom: 33px; color: var(--coral); font: 10px monospace; letter-spacing: .08em; text-transform: uppercase; }
+    .case h3 { font-size: 21px; }
+    .case p { margin: 0; color: var(--soft); font-size: 12px; line-height: 1.42; }
+    .dark .case { border-color: rgba(248, 247, 242, .22); background: rgba(255, 255, 255, .05); }
+    .dark .case p { color: rgba(248, 247, 242, .67); }
+    .dark .case .case-type { color: var(--mint); }
+
+    .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 42px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .flow-item { min-height: 205px; padding: 20px; border-right: 1px solid var(--line); }
+    .flow-item:last-child { border-right: 0; }
+    .flow-item .number { display: block; margin-bottom: 38px; color: var(--coral); font: 11px monospace; }
+    .flow-item h3 { font-size: 22px; }
+    .flow-item p { margin: 0; color: var(--soft); font-size: 12px; line-height: 1.42; }
+    .dark .flow, .dark .flow-item { border-color: rgba(248, 247, 242, .22); }
+    .dark .flow-item .number { color: var(--mint); }
+    .dark .flow-item p { color: rgba(248, 247, 242, .67); }
+
+    .project-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 36px; }
+    .project { min-height: 174px; padding: 20px; border: 1px solid var(--line); background: rgba(255, 255, 255, .3); }
+    .project h3 { display: flex; justify-content: space-between; gap: 10px; font-size: 24px; }
+    .project h3 span { flex: 0 0 auto; font: 10px monospace; color: var(--coral); letter-spacing: .06em; text-transform: uppercase; }
+    .project p { margin: 0; color: var(--soft); font-size: 13px; line-height: 1.45; }
+
+    .matrix { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; margin-top: 36px; }
+    .matrix-item { min-height: 144px; padding: 16px; border-top: 4px solid var(--coral); background: rgba(255, 255, 255, .3); }
+    .matrix-item:nth-child(2) { border-color: #397f75; }
+    .matrix-item:nth-child(3) { border-color: var(--yellow); }
+    .matrix-item:nth-child(4) { border-color: var(--lavender); }
+    .matrix-item:nth-child(5) { border-color: var(--ink); }
+    .matrix-item strong { display: block; margin-bottom: 28px; font: 13px var(--display); }
+    .matrix-item p { margin: 0; color: var(--soft); font-size: 11px; line-height: 1.4; }
+
+    .framework-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 13px; margin-top: 38px; }
+    .framework-card { min-height: 185px; padding: 20px; border: 1px solid var(--line); background: rgba(255, 255, 255, .28); }
+    .dark .framework-card { border-color: rgba(248, 247, 242, .22); background: rgba(255, 255, 255, .05); }
+    .framework-card strong { display: block; margin-bottom: 36px; font: 11px monospace; color: var(--coral); text-transform: uppercase; }
+    .dark .framework-card strong { color: var(--mint); }
+    .framework-card h3 { font-size: 23px; }
+    .framework-card p { margin: 0; color: var(--soft); font-size: 12px; line-height: 1.45; }
+    .dark .framework-card p { color: rgba(248, 247, 242, .68); }
+
+    .report-layout { display: grid; grid-template-columns: 1.2fr .8fr; gap: 45px; align-items: center; }
+    .report-card { padding: 26px; border: 1px solid var(--line); background: var(--lavender); }
+    .report-card .report-label { display: block; margin-bottom: 46px; color: var(--coral); font: 10px monospace; text-transform: uppercase; }
+    .report-card h3 { font-size: 28px; }
+    .report-card p { max-width: 500px; margin: 0; color: var(--soft); font-size: 14px; line-height: 1.5; }
+    .report-checks { display: grid; gap: 0; border-top: 1px solid var(--line); }
+    .report-check { display: grid; grid-template-columns: 24px 1fr; gap: 8px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .report-check b { color: var(--coral); font: 12px monospace; }
+    .report-check span { font-size: 13px; }
+
+    .ask { display: flex; align-items: end; justify-content: space-between; gap: 40px; }
+    .stamp { display: grid; flex: 0 0 auto; width: 98px; height: 98px; place-items: center; border-radius: 50%; color: var(--ink); background: var(--yellow); font: 11px/1.1 monospace; text-align: center; text-transform: uppercase; transform: rotate(-10deg); }
+    .roadmap { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 45px; }
+    .roadmap-item { min-height: 150px; padding: 20px; border: 1px solid var(--line); background: rgba(255, 255, 255, .28); }
+    .roadmap-item strong { display: block; margin-bottom: 12px; color: var(--coral); font: 11px monospace; text-transform: uppercase; }
+    .roadmap-item p { margin: 0; color: var(--soft); font-size: 13px; line-height: 1.4; }
+
+    .controls { position: fixed; z-index: 10; right: 28px; bottom: 22px; display: flex; gap: 7px; align-items: center; }
+    .controls button { width: 39px; height: 32px; border: 1px solid rgba(248, 247, 242, .32); border-radius: 3px; color: var(--paper); background: rgba(17, 26, 53, .7); cursor: pointer; }
+    .controls button:hover { background: var(--coral); }
+    .dots { display: flex; gap: 5px; max-width: 250px; margin: 0 6px; flex-wrap: wrap; justify-content: center; }
+    .dot-nav { width: 6px !important; height: 6px !important; padding: 0; border: 0 !important; border-radius: 50%; background: rgba(248, 247, 242, .4) !important; cursor: pointer; }
+    .dot-nav.is-active { background: var(--coral) !important; }
+
+    @media (max-width: 900px) {
+      body { overflow: auto; }
+      .slide { min-height: 100svh; height: auto; padding: 72px 22px 80px; }
+      .topline, .footerline { left: 22px; right: 22px; }
+      .topline { top: 22px; }
+      .footerline { bottom: 20px; }
+      .split, .two-col, .report-layout { grid-template-columns: 1fr; gap: 28px; }
+      .orb { width: min(78vw, 380px); }
+      .timeline { grid-template-columns: repeat(2, 1fr); }
+      .principle-grid, .project-grid { grid-template-columns: 1fr; }
+      .role-grid, .kpi-grid, .case-grid, .framework-grid { grid-template-columns: repeat(2, 1fr); }
+      .flow { grid-template-columns: repeat(2, 1fr); }
+      .flow-item:nth-child(2) { border-right: 0; }
+      .flow-item:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
+      .matrix { grid-template-columns: repeat(2, 1fr); }
+      .matrix-item:last-child { grid-column: 1 / -1; }
+      .roadmap { grid-template-columns: repeat(2, 1fr); }
+      .ask { display: block; }
+      .ask .stamp { margin-top: 25px; }
+      .controls { right: 15px; bottom: 12px; }
+    }
+
+    @media (max-width: 560px) {
+      h1 { font-size: clamp(48px, 15vw, 75px); }
+      h2 { font-size: clamp(38px, 12vw, 58px); }
+      .timeline, .role-grid, .kpi-grid, .case-grid, .framework-grid, .matrix, .roadmap { grid-template-columns: 1fr; }
+      .matrix-item:last-child { grid-column: auto; }
+      .flow { grid-template-columns: 1fr; }
+      .flow-item, .flow-item:nth-child(2) { border-right: 0; border-bottom: 1px solid var(--line); }
+      .flow-item:last-child { border-bottom: 0; }
+      .footerline { flex-direction: column; gap: 5px; }
+      .dots { max-width: 180px; }
+    }
+
+    @media print {
+      body { overflow: visible; background: white; }
+      .slide, .slide.is-active { display: flex; page-break-after: always; min-height: 100vh; }
+      .controls { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-live="polite">
+    <section class="slide is-active" data-title="The proposal">
+      <div class="topline"><span class="brand"><span class="brand-mark">a<span>m</span></span> Amadeus Open Source</span><span class="slide-number"></span></div>
+      <div class="content split"><div><p class="kicker">Board working session · 11 September 2026</p><h1>From activity<br><em>to a public story.</em></h1><p class="lede">A factual narrative and publishing framework for projecting Amadeus open source activity to the world—without losing the people, governance and uncertainty behind the numbers.</p><div class="chips"><span class="chip">journey</span><span class="chip">evidence</span><span class="chip">people</span><span class="chip">public frame</span></div></div><div class="orb"><div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="dot"></div><div class="dot"></div></div></div>
+      <div class="footerline"><span>Working draft · facts are dated and sourced</span><span>Use ← → to navigate</span></div>
+    </section>
+
+    <section class="slide dark" data-title="The arc">
+      <div class="topline"><span>01 / The background</span><span class="slide-number"></span></div>
+      <div class="content"><p class="kicker">The arc we can tell</p><h2>From experimentation<br><em>to maturity.</em></h2><p class="lede">The story is not “we started a website.” It is a decade-long shift from learning about open source to building the habits, governance and community that let Amadeus participate with intent.</p><div class="timeline"><div class="timeline-item"><span class="timeline-year">2013–14</span><strong>Early steps</strong><p>Aria Templates and early internal conversations around using and learning from open source.</p></div><div class="timeline-item"><span class="timeline-year">2017</span><strong>Join ecosystems</strong><p>Linux Foundation membership placed Amadeus closer to foundational open technology communities.</p></div><div class="timeline-item"><span class="timeline-year">2021</span><strong>Find guidance</strong><p>OSPO Alliance engagement added external OSPO practice and governance context.</p></div><div class="timeline-item"><span class="timeline-year">2023</span><strong>Name the principles</strong><p>The Amadeus Open Source Manifesto formalised a shared language for responsible openness.</p></div><div class="timeline-item"><span class="timeline-year">2025</span><strong>Build the mechanism</strong><p>The Open Source Community and Open Source Board made the work more visible and actionable.</p></div><div class="timeline-item"><span class="timeline-year">2026</span><strong>Make it legible</strong><p>The opportunity now is to turn activity, evidence and learning into a public story.</p></div></div><p class="source">Source: supplied draft <em>2026 Amadeus Open Source Report</em>; historical milestones are reported draft material.</p></div>
+      <div class="footerline"><span>A story with a past, a present and a next move</span><span>Amadeus Open Source</span></div>
+    </section>
+
+    <section class="slide mint" data-title="The Manifesto">
+      <div class="topline"><span>02 / The north star</span><span class="slide-number"></span></div>
+      <div class="content"><p class="kicker">The Manifesto is already a public contract</p><h2>Use it as the<br><em>editorial north star.</em></h2><div class="principle-grid"><div class="principle-panel"><h3>Company principles</h3><ul class="principle-list"><li><b>C1</b><span>Encourage employees to use, contribute to and create Inner and Open Source.</span></li><li><b>C2</b><span>Facilitate appropriate time for participation.</span></li><li><b>C3</b><span>Support learning and advancement through Open Source.</span></li><li><b>C4</b><span>Promote visibility in Open Source communities.</span></li><li><b>C5</b><span>Support compliance in the use of Open Source.</span></li></ul></div><div class="principle-panel"><h3>Employee principles</h3><ul class="principle-list"><li><b>E1</b><span>Be efficient: look for Inner and Open Source alternatives before reinventing.</span></li><li><b>E2</b><span>Be active in the communities that matter to the work.</span></li><li><b>E3</b><span>Be a contributor within the scope of day-to-day work.</span></li><li><b>E4</b><span>Be responsible, respectful and compliant.</span></li></ul></div></div><p class="source">Source: <a href="https://github.com/AmadeusITGroup/opensource-manifesto">Amadeus Open Source Manifesto</a>.</p></div>
+      <div class="footerline"><span>Principles before promotion</span><span>Amadeus Open Source</span></div>
+    </section>
+
+    <section class="slide" data-title="The mindset">
+      <div class="topline"><span>03 / The meaning</span><span class="slide-number"></span></div>
+      <div class="content"><p class="kicker">The point is not just publishing code</p><div class="quote">“The intention is not to propose Open/Inner Source just for the sake of publishing the code. What is more important is the mindset transformation.”<cite>Amadeus Open Source Manifesto · DETAILS.md</cite></div><div class="role-grid"><div class="role"><strong>Build</strong><p>Code and architecture are one form of contribution.</p></div><div class="role"><strong>Explain</strong><p>Documentation, examples and issue reports lower the next person’s cost.</p></div><div class="role"><strong>Connect</strong><p>Reviewers, mentors, ambassadors and maintainers make participation possible.</p></div><div class="role"><strong>Learn</strong><p>Research, talks and feedback turn activity into shared capability.</p></div></div><p class="fineprint">The Manifesto describes participation as organic, not centrally forced. This is why the public story should value all contributors—not only coders—and show the work behind the work.</p><p class="source">Source: <a href="https://github.com/AmadeusITGroup/opensource-manifesto/blob/main/DETAILS.md">Manifesto details</a>.</p></div>
+      <div class="footerline"><span>Transparency · empowerment · collaboration · knowledge exchange</span><span>Amadeus Open Source</span></div>
+    </section>
+
+    <section class="slide dark" data-title="Board pipeline">
+      <div class="topline"><span>04 / The 2026 signal</span><span class="slide-number"></span></div>
+      <div class="content"><p class="kicker">A year in motion: the Open Source Board</p><h2>39 cases.<br><em>Many kinds of work.</em></h2><p class="lede">The Board record shows a living pipeline: upstream fixes, new public assets, research, standards proposals, security work and questions that are still being shaped.</p><div class="kpi-grid"><div class="kpi"><strong>10</strong><span>Q1 cases</span></div><div class="kpi"><strong>21</strong><span>Q2 cases</span></div><div class="kpi"><strong>8</strong><span>Q3-to-date cases</span></div><div class="kpi"><strong>140</strong><span>recorded comments</span></div></div><div class="status-band"><span>15 Approved</span><span>11 Published</span><span>2 Working on contribution</span><span>1 In Progress</span><span>1 Todo</span><span>9 Unknown</span></div><p class="fineprint">Q3 means 1 July–10 September 2026 in this capture. These are custom Project workflow statuses, not GitHub issue states. The Board export includes discussions, not just titles.</p><p class="source">Source: dated exports in `.memories/evidence/osboard-2026-Q1.json`, `osboard-2026-Q2-live.json`, `osboard-2026-Q3.json`; status schema in `board-project-fields-2026-09-10.json`.</p></div>
+      <div class="footerline"><span>Workflow status is evidence of governance, not a vanity counter</span><span>Amadeus Open Source</span></div>
+    </section>
+
+    <section class="slide" data-title="Case mix">
+      <div class="topline"><span>05 / The case mix</span><span class="slide-number"></span></div>
+      <div class="content"><p class="kicker">What the Board is actually moving</p><h2>Contribution has<br><em>many shapes.</em></h2><div class="case-grid"><div class="case"><span class="case-type">Upstream contribution</span><h3>Pyroscope · eBPF · OpenTelemetry</h3><p>Bug fixes, configuration, profiling features and documentation—recorded as work that already happened.</p></div><div class="case"><span class="case-type">New public assets</span><h3>AI primitives · Flamme · Helter Skelter</h3><p>From developer productivity to distributed Java and data tooling, proposals become public repositories at different speeds.</p></div><div class="case"><span class="case-type">Research & standards</span><h3>Vulnerability research · CAID · WaterLens</h3><p>Research, white papers and sustainability work can move open source practice before they become a conventional library.</p></div><div class="case"><span class="case-type">Quality & maintenance</span><h3>Microcks · Angular · dependency parser</h3><p>Adoption creates upstream issues, compatibility work, tests and documentation that improve the ecosystem.</p></div></div><p class="source">Sources: Q2/Q3 Board exports, especially issues #92, #96, #98–#103, #106, #109–#122. Case descriptions are shortened paraphrases.</p></div>
+      <div class="footerline"><span>Make room for the less visible work</span><span>Amadeus Open Source</span></div>
+    </section>
+
+    <section class="slide coral" data-title="Board conversations">
+      <div class="topline"><span>06 / The operating behaviour</span><span class="slide-number"></span></div>
+      <div class="content"><p class="kicker" style="color:var(--ink)">A contribution is a conversation, not a hand-off</p><h2>Good governance<br><em style="color:var(--ink)">sharpens the work.</em></h2><div class="flow"><div class="flow-item"><span class="number">01</span><h3>Ask upstream first</h3><p>Issue #97 asks for an upstream issue and useful reproduction evidence before creating a fork.</p></div><div class="flow-item"><span class="number">02</span><h3>Check the landscape</h3><p>Issue #100 weighs project liveness and Vector before investing in a stale dependency.</p></div><div class="flow-item"><span class="number">03</span><h3>Improve the proposal</h3><p>Issue #103 asks for generic scope, extensibility and IP Portal follow-through.</p></div><div class="flow-item"><span class="number">04</span><h3>Respect the community</h3><p>Issue #121 asks contributors not to leak internal process and to adjust upstream tone.</p></div></div><p class="source" style="color:rgba(248,247,242,.8)">Source: dated Board exports generated from the private `OpenSourceBoard` repository; issue numbers refer to internal records when access is available.</p></div>
+      <div class="footerline" style="color:rgba(248,247,242,.7)"><span>Review is part of the contribution</span><span>Amadeus Open Source</span></div>
+    </section>
+
+    <section class="slide dark" data-title="Activity baseline">
+      <div class="topline"><span>07 / The measurable baseline</span><span class="slide-number"></span></div>
+      <div class="content"><p class="kicker">A refreshed contributor view</p><h2>180 people.<br><em>5,692 signals.</em></h2><p class="lede">A current refresh of the `os_contributors` GitHub team shows sustained activity across external projects since 2024. It is a useful baseline—not a claim that GitHub captures every form of participation.</p><div class="kpi-grid"><div class="kpi"><strong>4,339</strong><span>external pull requests</span></div><div class="kpi"><strong>1,353</strong><span>external issues</span></div><div class="kpi"><strong>3,821</strong><span>merged pull requests</span></div><div class="kpi"><strong>88.1%</strong><span>team merge rate</span></div></div><div class="status-band"><span>469 external projects</span><span>242 collaborative projects</span><span>51.6% collaboration rate</span><span>46 language buckets</span></div><p class="fineprint">Capture: 10 September 2026 · cohort: current `AmadeusITGroup/os_contributors` team · period: 2024 onward · source: analyzer JSON, complete pagination and authenticated GitHub API.</p><p class="source">Reproduce with the command recorded in `.memories/evidence-ledger.md` and the dated raw artifacts under `.memories/evidence/AmadeusITGroup-os_contributors-team-analysis-2026-09-10/`.</p></div>
+      <div class="footerline"><span>Measure participation without reducing people to a leaderboard</span><span>Amadeus Open Source</span></div>
+    </section>
+
+    <section class="slide" data-title="Repository scope">
+      <div class="topline"><span>08 / The portfolio lens</span><span class="slide-number"></span></div>
+      <div class="content split"><div><p class="kicker">The organization is the scope</p><h2>Separate the<br><em>portfolio from the signal.</em></h2><p class="lede">A repository inventory is not the same thing as a contribution report. We need both views, with forks clearly separated.</p><div class="kpi-grid" style="grid-template-columns:repeat(2,1fr)"><div class="kpi"><strong>227</strong><span>repositories visible to the authenticated account</span></div><div class="kpi"><strong>171</strong><span>non-fork repositories</span></div><div class="kpi"><strong>56</strong><span>forks — possible contribution signals</span></div><div class="kpi"><strong>203</strong><span>public · 24 private</span></div></div></div><div class="report-card"><span class="report-label">Public reporting rule</span><h3>Tell the project story from non-forks.</h3><p>Use forks to investigate possible upstream work, but do not count a fork as Amadeus-led activity without evidence of contribution, stewardship or publication.</p><div class="report-checks" style="margin-top:24px"><div class="report-check"><b>01</b><span>inventory all visible repositories</span></div><div class="report-check"><b>02</b><span>classify fork / non-fork</span></div><div class="report-check"><b>03</b><span>verify public status and scope</span></div></div></div></div><p class="source">Source: authenticated GitHub organization inventory captured 2026-09-10. Private repository names are intentionally not repeated here.</p>
+      <div class="footerline"><span>Portfolio evidence ≠ activity evidence</span><span>Amadeus Open Source</span></div>
+    </section>
+
+    <section class="slide mint" data-title="Flagship pathways">
+      <div class="topline"><span>09 / The project stories</span><span class="slide-number"></span></div>
+      <div class="content"><p class="kicker">Flagship pathways</p><h2>Different projects.<br><em>Different kinds of openness.</em></h2><div class="project-grid"><div class="project"><h3>Perses <span>lead & grow</span></h3><p>Amadeus-initiated observability work that grew into a multi-company, CNCF-aligned ecosystem. The story is leadership, adoption and shared roadmap—not just repository ownership.</p></div><div class="project"><h3>Carmen / SWI <span>share & transfer</span></h3><p>From carbon measurement to software-water research resources: the public value includes methodology, sources, limitations, licensing and a path toward neutral stewardship.</p></div><div class="project"><h3>Yggy <span>scope honestly</span></h3><p>An Apache-2.0 hybrid/multi-cloud framework with public documentation that distinguishes the shipped v1 from the target architecture and states its contribution boundary.</p></div><div class="project"><h3>Design Factory / CoDoc <span>propose & invite</span></h3><p>Design assets, AI-optimized documentation and a public RFC show how Amadeus can share practices while leaving room for critique and governance to develop.</p></div></div><p class="source">Sources: supplied draft report; <a href="https://github.com/AmadeusITGroup/Yggy">Yggy</a>; <a href="https://github.com/Green-Software-Foundation/software-water-handbook">Software Water Impact Resources</a>; <a href="https://github.com/AmadeusITGroup/Think-Inside-the-Box-White-Paper">Think Inside the Box</a>.</p></div>
+      <div class="footerline"><span>The unit of storytelling is the pathway, not the repo count</span><span>Amadeus Open Source</span></div>
+    </section>
+
+    <section class="slide" data-title="Trust signals">
+      <div class="topline"><span>10 / The public proof</span><span class="slide-number"></span></div>
+      <div class="content"><p class="kicker">What earns trust in a public project card</p><h2>Show the work.<br><em>Show the boundaries.</em></h2><div class="framework-grid"><div class="framework-card"><strong>Yggy</strong><h3>Current scope</h3><p>Problem, principles, shipped v1, target architecture, license and contribution boundary are all visible.</p></div><div class="framework-card"><strong>Software Water</strong><h3>Reproducibility</h3><p>Sources, derived tables, methodological conflicts, licensing, DCO and governance are part of the artifact.</p></div><div class="framework-card"><strong>Think Inside Box</strong><h3>Proposal status</h3><p>Reference implementation and security caveats are shared while the proposal remains an RFC—not an adopted standard.</p></div></div><div class="status-band"><span>Problem</span><span>Current release</span><span>License</span><span>Maintainers</span><span>Contribution path</span><span>Evidence</span><span>Limitations</span><span>Last verified</span></div><p class="source">This framework is an interpretation from the public project materials; it is a recommendation for the Amadeus report, not a claim that every project currently follows it.</p></div>
+      <div class="footerline"><span>Honest scope is a feature</span><span>Amadeus Open Source</span></div>
+    </section>
+
+    <section class="slide yellow" data-title="Open and IP">
+      <div class="topline"><span>11 / The control plane</span><span class="slide-number"></span></div>
+      <div class="content"><p class="kicker">Open Source + IP are complementary</p><h2>Openness with<br><em>deliberate control.</em></h2><div class="two-col"><div class="principle-panel"><h3>Openness creates</h3><ul class="principle-list"><li><b>→</b><span>reuse and interoperability</span></li><li><b>→</b><span>access to external expertise</span></li><li><b>→</b><span>upstream feedback and shared maintenance</span></li><li><b>→</b><span>credible standards and ecosystems</span></li></ul></div><div class="principle-panel"><h3>Governance protects</h3><ul class="principle-list"><li><b>→</b><span>IP and licensing compatibility</span></li><li><b>→</b><span>SCA, SBOM and security baselines</span></li><li><b>→</b><span>traceable contribution practices</span></li><li><b>→</b><span>roadmap, ownership and continuity choices</span></li></ul></div></div><div class="matrix"><div class="matrix-item"><strong>Strategic</strong><p>Protect influence, ownership and differentiation.</p></div><div class="matrix-item"><strong>Mission critical</strong><p>Protect reliability, continuity and accountability.</p></div><div class="matrix-item"><strong>Fit-for-purpose</strong><p>Meet the baseline at the best total cost.</p></div><div class="matrix-item"><strong>Low impact</strong><p>Keep cost low and exit options open.</p></div><div class="matrix-item"><strong>Undefined</strong><p>Learn quickly without premature commitment.</p></div></div><p class="source">Source: supplied Amadeus sourcing-strategy SteerCo material. This internal/WIP framework is shown as a lens, not as public copy or a final policy.</p></div>
+      <div class="footerline"><span>Governance is how openness scales safely</span><span>Amadeus Open Source</span></div>
+    </section>
+
+    <section class="slide dark" data-title="People">
+      <div class="topline"><span>12 / The people behind the graph</span><span class="slide-number"></span></div>
+      <div class="content"><p class="kicker">People are the infrastructure</p><h2>Count contributors.<br><em>Recognise contribution.</em></h2><p class="lede">The public report should make room for maintainers, reviewers, issue reporters, researchers, speakers, documentation authors, mentors, community organisers and people who make an upstream conversation possible.</p><div class="role-grid"><div class="role"><strong>Builders</strong><p>Features, fixes, tests, releases and new projects.</p></div><div class="role"><strong>Keepers</strong><p>Maintenance, triage, security, governance and continuity.</p></div><div class="role"><strong>Translators</strong><p>Docs, examples, talks, standards and context that travels.</p></div><div class="role"><strong>Connectors</strong><p>Reviewers, ambassadors, managers and community care.</p></div></div><div class="quote" style="margin-top:38px">The draft report says the community spans about 220 active members across 12 countries. The refreshed GitHub team has 180 members. These are different populations—keep both labels.</div><p class="source">Source: supplied 2026 key ideas document and dated 2026-09-10 GitHub team refresh. The 220 / 12 figure remains a draft-report claim pending validation.</p></div>
+      <div class="footerline"><span>Everyone is welcome; not every contribution looks like code</span><span>Amadeus Open Source</span></div>
+    </section>
+
+    <section class="slide" data-title="Comparison">
+      <div class="topline"><span>13 / A useful comparison</span><span class="slide-number"></span></div>
+      <div class="content"><p class="kicker">What SAP’s 2025 report teaches us</p><h2>Borrow the structure.<br><em>Keep our own evidence.</em></h2><p class="lede">The SAP report is useful less as a benchmark and more as a publishing pattern: it moves from milestones to topical work, contributions, foundations, communities, culture and what comes next.</p><div class="flow"><div class="flow-item"><span class="number">01</span><h3>Milestones</h3><p>Give readers the journey before the metrics.</p></div><div class="flow-item"><span class="number">02</span><h3>Contributions</h3><p>Separate initiated projects from third-party work.</p></div><div class="flow-item"><span class="number">03</span><h3>Communities</h3><p>Show foundations, events, champions and people.</p></div><div class="flow-item"><span class="number">04</span><h3>What’s next</h3><p>Turn the report into an invitation, not a yearbook.</p></div></div><p class="source">Comparison source: local `.tmp/SAP/SAP_Open_Source_Report_2025.pdf`, a public SAP report. No SAP metrics are reused as Amadeus claims.</p></div>
+      <div class="footerline"><span>Benchmark the information architecture, not the company</span><span>Amadeus Open Source</span></div>
+    </section>
+
+    <section class="slide mint" data-title="Public framework">
+      <div class="topline"><span>14 / The publishing framework</span><span class="slide-number"></span></div>
+      <div class="content"><p class="kicker">A public report that can grow</p><h2>Make the important<br><em>easy to verify.</em></h2><div class="framework-grid"><div class="framework-card"><strong>01 / Story</strong><h3>Journey & principles</h3><p>Manifesto-backed context: why open source matters and how Amadeus participates.</p></div><div class="framework-card"><strong>02 / Scope</strong><h3>Method & date</h3><p>Repositories, fork rule, cohort, Board-status semantics, query date and limitations.</p></div><div class="framework-card"><strong>03 / Portfolio</strong><h3>Projects & pathways</h3><p>Non-fork project cards plus upstream contribution signals, with current status.</p></div><div class="framework-card"><strong>04 / People</strong><h3>Participation</h3><p>Maintainership, reviews, docs, research, mentoring and community work—not only commits.</p></div><div class="framework-card"><strong>05 / Evidence</strong><h3>Stories & outcomes</h3><p>Context, action, governance, adoption, learning and what remains unknown.</p></div><div class="framework-card"><strong>06 / Next</strong><h3>Invitation</h3><p>Open issues, contribution paths, upcoming Board work and the next reporting date.</p></div></div></div>
+      <div class="footerline"><span>From a landing page to a living evidence system</span><span>Amadeus Open Source</span></div>
+    </section>
+
+    <section class="slide" data-title="Report card">
+      <div class="topline"><span>15 / The project card</span><span class="slide-number"></span></div>
+      <div class="content report-layout"><div><p class="kicker">A reusable format for every public story</p><h2>One card.<br><em>No mystery.</em></h2><p class="lede">A reader should be able to understand the project, verify the evidence and see the next step without needing private context.</p></div><div class="report-card"><span class="report-label">Project / story card</span><h3>What problem does it solve?</h3><p>Then show what is public now, who maintains it, how to contribute, what evidence supports the impact, which limitations remain and when the facts were last checked.</p><div class="report-checks" style="margin-top:23px"><div class="report-check"><b>01</b><span>problem & audience</span></div><div class="report-check"><b>02</b><span>release, license & owners</span></div><div class="report-check"><b>03</b><span>contribution path</span></div><div class="report-check"><b>04</b><span>evidence & limitations</span></div><div class="report-check"><b>05</b><span>last verified / next step</span></div></div></div></div><p class="source">Framework derived from the public Yggy, Software Water Impact Resources and Think Inside the Box documentation patterns.</p>
+      <div class="footerline"><span>Unknown is better than implied certainty</span><span>Amadeus Open Source</span></div>
+    </section>
+
+    <section class="slide dark" data-title="Evidence contract">
+      <div class="topline"><span>16 / The evidence contract</span><span class="slide-number"></span></div>
+      <div class="content"><p class="kicker">Make confidence visible</p><h2>Every claim gets<br><em>a label.</em></h2><div class="framework-grid"><div class="framework-card"><strong>Observed</strong><h3>Captured directly</h3><p>GitHub API, repository README, public documentation or Board Project field at a stated date.</p></div><div class="framework-card"><strong>Reported</strong><h3>Supplied material</h3><p>Draft report, key-ideas document or stakeholder-provided number that still needs refresh ownership.</p></div><div class="framework-card"><strong>Interpreted</strong><h3>Narrative synthesis</h3><p>A human-readable conclusion built from multiple sources; useful, but not a new measurement.</p></div><div class="framework-card"><strong>Pending</strong><h3>Needs a decision</h3><p>Publication approval, project owner, legal/IP check, current metric or external validation.</p></div><div class="framework-card"><strong>Scope</strong><h3>Say what is counted</h3><p>Repository population, fork rule, team cohort, time window and custom status vocabulary.</p></div><div class="framework-card"><strong>Refresh</strong><h3>Make it repeatable</h3><p>Keep the command, capture date and raw artifact beside the deck or report.</p></div></div><p class="source">This contract is recorded in `.memories/evidence-ledger.md` and is the recommended basis for future public reporting.</p></div>
+      <div class="footerline"><span>Transparency includes the method</span><span>Amadeus Open Source</span></div>
+    </section>
+
+    <section class="slide yellow" data-title="Decision ask">
+      <div class="topline"><span>17 / The Board ask</span><span class="slide-number"></span></div>
+      <div class="content"><div class="ask"><div><p class="kicker">A useful decision on 11 September</p><h2>Agree the story.<br><em>Make it shareable.</em></h2><p class="lede">The first release does not need every project or every metric. It needs a trustworthy frame, a small set of approved stories and a way to keep learning in public.</p></div><div class="stamp">share<br>the lift</div></div><div class="roadmap"><div class="roadmap-item"><strong>01 / Align</strong><p>Confirm the journey, Manifesto principles and contributor-inclusive voice.</p></div><div class="roadmap-item"><strong>02 / Select</strong><p>Choose three to five public stories with owners and publication approval.</p></div><div class="roadmap-item"><strong>03 / Instrument</strong><p>Agree metric definitions, fork handling, Board status semantics and refresh cadence.</p></div><div class="roadmap-item"><strong>04 / Publish</strong><p>Launch the public front door, then add reports and stories through pull requests.</p></div></div></div>
+      <div class="footerline"><span>Build openly · Move together</span><span>Discussion</span></div>
+    </section>
+
+    <section class="slide" data-title="Sources">
+      <div class="topline"><span>18 / Sources & reproducibility</span><span class="slide-number"></span></div>
+      <div class="content"><p class="kicker">Read the evidence, then rerun the story</p><h2>References that<br><em>travel with the deck.</em></h2><div class="two-col"><div class="principle-panel"><h3>Public sources</h3><ul class="principle-list"><li><b>↗</b><span><a href="https://github.com/AmadeusITGroup/opensource-manifesto">Amadeus Open Source Manifesto</a></span></li><li><b>↗</b><span><a href="https://github.com/AmadeusITGroup/Yggy">Yggy</a> and its public documentation</span></li><li><b>↗</b><span><a href="https://github.com/Green-Software-Foundation/software-water-handbook">Software Water Impact Resources</a></span></li><li><b>↗</b><span><a href="https://amadeusitgroup.github.io/Think-Inside-the-Box-White-Paper/white-paper/">Think Inside the Box</a></span></li><li><b>↗</b><span><a href="https://medium.com/data-science-at-microsoft/building-an-eval-harness-for-ai-voice-agents-fd236d620248">Microsoft–Amadeus eval story</a></span></li></ul></div><div class="principle-panel"><h3>Local evidence</h3><ul class="principle-list"><li><b>→</b><span>`.memories/evidence-ledger.md` — claims and caveats</span></li><li><b>→</b><span>`.memories/evidence/osboard-2026-Q*.json` — Board cases</span></li><li><b>→</b><span>`.memories/evidence/AmadeusITGroup-os_contributors-team-analysis-2026-09-10/` — refresh</span></li><li><b>→</b><span>`.memories/handover-map.md` — future roles and rules</span></li><li><b>→</b><span>`.tmp/Amadeus` and `.tmp/SAP` — supplied drafts</span></li></ul></div></div><p class="fineprint">The HTML file is self-contained: it does not require external images, JavaScript packages or a running server. Links are references only. For publication, validate all draft and pending claims first.</p></div>
+      <div class="footerline"><span>Captured 10 September 2026</span><span>Amadeus Open Source</span></div>
+    </section>
+  </main>
+
+  <nav class="controls" aria-label="Presentation controls"><button type="button" data-action="prev" aria-label="Previous slide">←</button><div class="dots"></div><button type="button" data-action="next" aria-label="Next slide">→</button></nav>
+  <script>
+    const slides = [...document.querySelectorAll('.slide')];
+    const dots = document.querySelector('.dots');
+    let current = 0;
+    slides.forEach((slide, index) => {
+      const number = slide.querySelector('.slide-number');
+      if (number) number.textContent = `${String(index + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+      const dot = document.createElement('button');
+      dot.className = 'dot-nav' + (index === 0 ? ' is-active' : '');
+      dot.type = 'button';
+      dot.title = slide.dataset.title || `Slide ${index + 1}`;
+      dot.setAttribute('aria-label', `Go to slide ${index + 1}: ${dot.title}`);
+      dot.addEventListener('click', () => show(index));
+      dots.appendChild(dot);
+    });
+    function show(index) {
+      current = (index + slides.length) % slides.length;
+      slides.forEach((slide, i) => slide.classList.toggle('is-active', i === current));
+      dots.querySelectorAll('.dot-nav').forEach((dot, i) => dot.classList.toggle('is-active', i === current));
+    }
+    document.querySelector('[data-action="prev"]').addEventListener('click', () => show(current - 1));
+    document.querySelector('[data-action="next"]').addEventListener('click', () => show(current + 1));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === ' ') { event.preventDefault(); show(current + 1); }
+      if (event.key === 'ArrowLeft') { event.preventDefault(); show(current - 1); }
+      if (event.key === 'Home') show(0);
+      if (event.key === 'End') show(slides.length - 1);
+    });
+  </script>
+</body>
+</html>
