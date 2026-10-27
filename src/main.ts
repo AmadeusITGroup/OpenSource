@@ -1,6 +1,5 @@
 import './style.css'
 import amadeusWordmark from './assets/amadeus-wordmark-dark-sky.svg'
-import wavesImage from './assets/amadeus-graphic-waves-lightsky.png'
 import { posts, renderMarkdown, reports, type Post } from './content'
 
 type Route =
@@ -242,8 +241,8 @@ function renderFollow(): string {
           <p class="eyebrow">Keep up with us</p>
           <h2>Follow us on</h2>
           <div class="follow-links">
-            <a class="follow-card" style="background-image: url(${escapeHtml(wavesImage)})" href="https://www.linkedin.com/showcase/amadeus-for-engineers/posts/" target="_blank" rel="noreferrer"><span class="follow-kind">LinkedIn</span><strong>Amadeus for Engineers</strong><span class="follow-arrow">${icons.arrowRight}</span></a>
-            <a class="follow-card" style="background-image: url(${escapeHtml(wavesImage)})" href="https://amadeus.com/en/engineering-blog" target="_blank" rel="noreferrer"><span class="follow-kind">Blog</span><strong>Amadeus Engineering blog</strong><span class="follow-arrow">${icons.arrowRight}</span></a>
+            <a class="follow-card follow-card-linkedin" href="https://www.linkedin.com/showcase/amadeus-for-engineers/posts/" target="_blank" rel="noreferrer"><span class="follow-kind">LinkedIn</span><strong>Amadeus for Engineers</strong><span class="follow-arrow">${icons.arrowRight}</span></a>
+            <a class="follow-card follow-card-blog" href="https://amadeus.com/en/engineering-blog" target="_blank" rel="noreferrer"><span class="follow-kind">Blog</span><strong>Amadeus Engineering blog</strong><span class="follow-arrow">${icons.arrowRight}</span></a>
           </div>
         </div>
         <div class="invitation">
