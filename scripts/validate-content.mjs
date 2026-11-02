@@ -24,7 +24,8 @@ const errors = []
 
 for (const file of files) {
   const source = await readFile(resolve(contentDirectory, file), 'utf8')
-  const match = source.match(/^---\n([\s\S]*?)\n---\n/)
+  const normalizedSource = source.replace(/\r\n/g, '\n')
+  const match = normalizedSource.match(/^---\n([\s\S]*?)\n---\n/)
 
   if (!match) {
     errors.push(`${file}: missing frontmatter delimiters`)
