@@ -2397,6 +2397,40 @@ code {
   transition: border-color 180ms ease;
 }
 
+.follow-card-linkedin {
+  background-color: #1c0828;
+  background-image: url('./assets/amadeus-for-engineers-background-gradients-violet.svg');
+  color: #f6edff;
+}
+
+.follow-card-linkedin .follow-kind,
+.follow-card-linkedin .follow-arrow {
+  color: #f6edff;
+}
+
+.follow-card-blog {
+  isolation: isolate;
+  background-color: #000835;
+  color: #ebf3ff;
+}
+
+.follow-card-blog::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-color: #ebf3ff;
+  content: '';
+  mask-image: url('https://amadeus.com/content/dam/amadeuswebevo/brand/amadeus/colors/transparent/svg/dark-transparent-outline-arrow-right.svg');
+  mask-repeat: repeat;
+  mask-position: center;
+  mask-size: cover;
+}
+
+.follow-card-blog .follow-kind,
+.follow-card-blog .follow-arrow {
+  color: #ebf3ff;
+}
+
 .follow-card:hover {
   border-color: var(--df-theme-primary-30);
 }

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1365 768" role="img" aria-labelledby="title">
+  <title id="title">Amadeus for Engineers Background gradients_Violet</title>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#59266d"/>
+      <stop offset="1" stop-color="#1c0828"/>
+    </linearGradient>
+    <linearGradient id="lines" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d317e3"/>
+      <stop offset="0.52" stop-color="#7729d7"/>
+      <stop offset="1" stop-color="#3542d5"/>
+    </linearGradient>
+  </defs>
+  <rect width="1365" height="768" fill="url(#background)"/>
+  <g fill="none" stroke="url(#lines)" stroke-width="3">
+    <path d="M-440 -24 C-305 96 -210 230 -210 384 C-210 538 -305 672 -440 792"/>
+    <path d="M-225 -24 C-90 96 5 230 5 384 C5 538 -90 672 -225 792"/>
+    <path d="M-10 -24 C125 96 220 230 220 384 C220 538 125 672 -10 792"/>
+    <path d="M205 -24 C340 96 435 230 435 384 C435 538 340 672 205 792"/>
+    <path d="M420 -24 C555 96 650 230 650 384 C650 538 555 672 420 792"/>
+    <path d="M635 -24 C770 96 865 230 865 384 C865 538 770 672 635 792"/>
+    <path d="M850 -24 C985 96 1080 230 1080 384 C1080 538 985 672 850 792"/>
+    <path d="M1065 -24 C1200 96 1295 230 1295 384 C1295 538 1200 672 1065 792"/>
+    <path d="M1280 -24 C1415 96 1510 230 1510 384 C1510 538 1415 672 1280 792"/>
+    <path d="M1495 -24 C1630 96 1725 230 1725 384 C1725 538 1630 672 1495 792"/>
+  </g>
+</svg>

@@ -18,7 +18,8 @@ const requiredSkills = [
 const errors = []
 
 function parseFrontmatter(source, file) {
-  const match = source.match(/^---\n([\s\S]*?)\n---\n/)
+  const normalizedSource = source.replace(/\r\n/g, '\n')
+  const match = normalizedSource.match(/^---\n([\s\S]*?)\n---\n/)
   if (!match) {
     errors.push(`${file}: missing YAML frontmatter`)
     return {}
